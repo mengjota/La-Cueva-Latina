@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- Codificación: permite usar tildes y caracteres en español -->
+  <meta charset="UTF-8" />
+
+  <!-- Hace que la página se vea bien en celulares y tablets -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Lo que aparece en la pestaña del navegador -->
+  <title>La Cueva Latina | Restaurante</title>
+
+  <!-- Conectamos la hoja de estilos CSS que crearemos después -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Fuentes de Google: elegantes y gratuitas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- ============================================
+       BARRA DE NAVEGACIÓN (menú superior)
+  ============================================ -->
+  <nav class="navbar">
+    <div class="nav-logo">La Cueva Latina</div>
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#reservaciones">Reservaciones</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <!-- Ícono del carrito de compras -->
+    <div class="nav-carrito" id="btn-carrito">
+      🛒 <span class="carrito-contador" id="carrito-contador">0</span>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       SECCIÓN 1: HERO (la primera imagen grande)
+  ============================================ -->
+  <section class="hero" id="inicio">
+    <div class="hero-contenido">
+      <h1>Bienvenido a La Cueva Latina</h1>
+      <p>Sabores auténticos, ambiente inigualable</p>
+      <div class="hero-botones">
+        <a href="#menu" class="btn btn-primario">Ver Menú</a>
+        <a href="#reservaciones" class="btn btn-secundario">Reservar Mesa</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECCIÓN 2: MENÚ CON CARRITO
+  ============================================ -->
+  <section class="seccion-menu" id="menu">
+    <h2 class="seccion-titulo">Nuestro Menú</h2>
+    <p class="seccion-subtitulo">Selecciona tus platos favoritos</p>
+
+    <!-- Aquí van las tarjetas de cada plato (las agregaremos después) -->
+    <div class="menu-grid" id="menu-grid">
+      <!-- Los platos se generarán con JavaScript -->
+    </div>
+  </section>
+
+  <!-- ============================================
+       PANEL DEL CARRITO (aparece al hacer clic)
+  ============================================ -->
+  <div class="carrito-panel" id="carrito-panel">
+    <div class="carrito-header">
+      <h3>Tu Pedido</h3>
+      <button class="cerrar-carrito" id="cerrar-carrito">✕</button>
+    </div>
+    <div class="carrito-items" id="carrito-items">
+      <!-- Los items del carrito aparecen aquí -->
+    </div>
+    <div class="carrito-total">
+      <span>Total:</span>
+      <span id="carrito-total">$0.00</span>
+    </div>
+    <button class="btn btn-primario btn-pedir">Realizar Pedido</button>
+  </div>
+
+  <!-- ============================================
+       SECCIÓN 3: RESERVACIONES
+  ============================================ -->
+  <section class="seccion-reservaciones" id="reservaciones">
+    <h2 class="seccion-titulo">Reserva tu Mesa</h2>
+    <p class="seccion-subtitulo">Garantiza tu lugar con nosotros</p>
+
+    <form class="form-reservacion" id="form-reservacion">
+      <div class="form-grupo">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" placeholder="Tu nombre" required />
+      </div>
+      <div class="form-grupo">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" placeholder="+1 (000) 000-0000" required />
+      </div>
+      <div class="form-grupo">
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" required />
+      </div>
+      <div class="form-grupo">
+        <label for="hora">Hora</label>
+        <input type="time" id="hora" required />
+      </div>
+      <div class="form-grupo">
+        <label for="personas">Número de personas</label>
+        <select id="personas" required>
+          <option value="">Selecciona</option>
+          <option value="1">1 persona</option>
+          <option value="2">2 personas</option>
+          <option value="3">3 personas</option>
+          <option value="4">4 personas</option>
+          <option value="5">5 personas</option>
+          <option value="6">6+ personas</option>
+        </select>
+      </div>
+      <div class="form-grupo form-grupo-completo">
+        <label for="mensaje">Mensaje especial (opcional)</label>
+        <textarea id="mensaje" placeholder="Cumpleaños, alergias, preferencias..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primario btn-reservar">Confirmar Reservación</button>
+    </form>
+  </section>
+
+  <!-- ============================================
+       SECCIÓN 4: SOBRE NOSOTROS
+  ============================================ -->
+  <section class="seccion-nosotros" id="nosotros">
+    <div class="nosotros-contenido">
+      <div class="nosotros-texto">
+        <h2>Nuestra Historia</h2>
+        <p>La Cueva Latina nació del amor por la gastronomía auténtica. Un lugar donde cada plato cuenta una historia y cada visita se convierte en un recuerdo imborrable.</p>
+        <p>Nuestro equipo de chefs expertos combina recetas tradicionales con técnicas modernas para ofrecerte una experiencia única.</p>
+      </div>
+      <div class="nosotros-imagen">
+        <!-- Imagen del restaurante -->
+        <div class="imagen-placeholder">🍽️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SECCIÓN 5: CONTACTO Y UBICACIÓN
+  ============================================ -->
+  <section class="seccion-contacto" id="contacto">
+    <h2 class="seccion-titulo">Encuéntranos</h2>
+    <div class="contacto-grid">
+      <div class="contacto-info">
+        <div class="info-item">
+          <span class="info-icono">📍</span>
+          <div>
+            <strong>Dirección</strong>
+            <p>123 Calle Principal, Ciudad</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <span class="info-icono">📞</span>
+          <div>
+            <strong>Teléfono</strong>
+            <p>+1 (555) 123-4567</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <span class="info-icono">🕐</span>
+          <div>
+            <strong>Horario</strong>
+            <p>Lun - Vie: 11am - 10pm</p>
+            <p>Sáb - Dom: 10am - 11pm</p>
+          </div>
+        </div>
+      </div>
+      <!-- Espacio para el mapa -->
+      <div class="mapa-placeholder">
+        <p>📍 Mapa de ubicación</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       PIE DE PÁGINA
+  ============================================ -->
+  <footer class="footer">
+    <p>© 2024 La Cueva Latina. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Conectamos el archivo JavaScript al final del body -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
