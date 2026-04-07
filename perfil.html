@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Perfil — La Cueva Latina</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --fuego:       #e8521a;
+      --ambar:       #f0841a;
+      --ambar-claro: #ffaa4c;
+      --brasa:       #ff9a3c;
+      --dorado:      #c9a84c;
+      --crema:       #f5ead8;
+      --fondo-carbon:#0e0602;
+      --fondo-oscuro:#1a0a02;
+      --fondo-medio: #2d1008;
+      --fondo-calido:#3a1a08;
+      --fondo-tarjeta:#221008;
+      --texto-suave: #c4a882;
+      --madera-media:#6b3020;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--fondo-carbon);
+      color: var(--crema);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top:0; left:0; width:100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 60px;
+      background: rgba(14,6,2,0.96);
+      border-bottom: 1px solid rgba(240,132,26,0.2);
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--dorado), var(--brasa), var(--dorado));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: logo-shimmer 3s linear infinite;
+      text-decoration: none;
+    }
+    @keyframes logo-shimmer {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    .nav-acciones { display:flex; align-items:center; gap:16px; }
+    .btn-volver {
+      background: transparent;
+      border: 1px solid rgba(240,132,26,0.3);
+      color: var(--texto-suave);
+      padding: 8px 18px;
+      border-radius: 2px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-volver:hover { border-color: var(--ambar); color: var(--ambar); }
+    .btn-salir {
+      background: rgba(231,76,60,0.08);
+      border: 1px solid rgba(231,76,60,0.25);
+      color: #e74c3c;
+      padding: 8px 18px;
+      border-radius: 2px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-salir:hover { background: rgba(231,76,60,0.15); }
+
+    /* ── HERO PERFIL ── */
+    .perfil-hero {
+      padding-top: 80px;
+      background:
+        radial-gradient(ellipse 70% 80% at 50% 0%, rgba(90,26,5,0.35) 0%, transparent 65%),
+        linear-gradient(180deg, #1a0500, #0e0400 60%);
+      padding-bottom: 0;
+    }
+
+    .perfil-hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 40px 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 36px;
+    }
+
+    .perfil-avatar-grande {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--fuego), var(--ambar));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 0 30px rgba(232,82,26,0.5), 0 0 60px rgba(232,82,26,0.2);
+      border: 3px solid rgba(240,132,26,0.4);
+    }
+
+    .perfil-info { flex: 1; padding-bottom: 24px; }
+
+    .perfil-saludo {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ambar);
+      margin-bottom: 6px;
+    }
+
+    .perfil-nombre {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      color: var(--crema);
+      margin-bottom: 6px;
+      text-shadow: 0 0 30px rgba(232,82,26,0.15);
+    }
+
+    .perfil-email {
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+    }
+
+    .perfil-miembro {
+      font-size: 0.75rem;
+      color: var(--ambar);
+      letter-spacing: 1px;
+      margin-top: 8px;
+      opacity: 0.7;
+    }
+
+    /* Línea divisoria con gradiente */
+    .perfil-linea {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(240,132,26,0.3), transparent);
+      margin-top: 30px;
+    }
+
+    /* ── ESTADÍSTICAS ── */
+    .perfil-stats {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .stat-perfil {
+      background: var(--fondo-tarjeta);
+      border: 1px solid rgba(240,132,26,0.12);
+      border-radius: 6px;
+      padding: 24px 28px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .stat-perfil:hover {
+      border-color: rgba(240,132,26,0.3);
+      transform: translateY(-3px);
+    }
+    .stat-perfil-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--ambar);
+      text-shadow: 0 0 15px rgba(240,132,26,0.4);
+    }
+    .stat-perfil-label {
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--texto-suave);
+      margin-top: 6px;
+    }
+
+    /* ── CONTENIDO ── */
+    .perfil-contenido {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    /* Tabs */
+    .perfil-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid rgba(240,132,26,0.15);
+      margin-bottom: 32px;
+    }
+    .perfil-tab {
+      background: none;
+      border: none;
+      color: var(--texto-suave);
+      padding: 14px 24px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
+    }
+    .perfil-tab.activo { color: var(--ambar); border-bottom-color: var(--ambar); }
+    .perfil-tab:hover:not(.activo) { color: var(--crema); }
+
+    /* ── CARDS PEDIDOS ── */
+    .pedidos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .pedido-card {
+      background: var(--fondo-tarjeta);
+      border: 1px solid rgba(240,132,26,0.12);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: all 0.3s;
+      animation: entrada 0.4s ease both;
+    }
+    @keyframes entrada {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    .pedido-card:hover {
+      border-color: rgba(240,132,26,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .pedido-card-header {
+      background: rgba(45,16,8,0.7);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(240,132,26,0.1);
+    }
+    .pedido-numero {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--ambar);
+    }
+    .pedido-tipo {
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      color: var(--texto-suave);
+    }
+    .pedido-card-body { padding: 16px 20px; }
+    .pedido-items {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+    .pedido-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pedido-total {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ambar);
+    }
+    .pedido-fecha {
+      font-size: 0.78rem;
+      color: var(--texto-suave);
+    }
+
+    /* ── CARDS RESERVACIONES ── */
+    .reservas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .reserva-card {
+      background: var(--fondo-tarjeta);
+      border: 1px solid rgba(240,132,26,0.12);
+      border-radius: 6px;
+      padding: 24px;
+      transition: all 0.3s;
+      animation: entrada 0.4s ease both;
+    }
+    .reserva-card:hover {
+      border-color: rgba(240,132,26,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .reserva-fecha-grande {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--crema);
+      margin-bottom: 4px;
+    }
+    .reserva-hora {
+      color: var(--ambar);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .reserva-detalle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      margin-bottom: 8px;
+    }
+
+    /* Estado vacío */
+    .estado-vacio {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--texto-suave);
+    }
+    .estado-vacio .icono { font-size: 3rem; margin-bottom: 16px; display: block; }
+    .estado-vacio p { margin-bottom: 20px; line-height: 1.6; }
+    .btn-ir {
+      display: inline-block;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--fuego), var(--ambar));
+      color: white;
+      border-radius: 2px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(232,82,26,0.3);
+      transition: all 0.3s;
+    }
+    .btn-ir:hover {
+      box-shadow: 0 0 30px rgba(232,82,26,0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Cargando */
+    .cargando {
+      text-align: center;
+      padding: 40px;
+      color: var(--texto-suave);
+      letter-spacing: 1px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">La Cueva Latina</a>
+    <div class="nav-acciones">
+      <a href="index.html" class="btn-volver">← Volver al Menú</a>
+      <button class="btn-salir" onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="perfil-hero">
+    <div class="perfil-hero-inner">
+      <div class="perfil-avatar-grande" id="avatar-grande">?</div>
+      <div class="perfil-info">
+        <div class="perfil-saludo">Bienvenido de vuelta</div>
+        <div class="perfil-nombre" id="perfil-nombre">Cargando...</div>
+        <div class="perfil-email"  id="perfil-email"></div>
+        <div class="perfil-miembro" id="perfil-miembro"></div>
+      </div>
+    </div>
+    <div class="perfil-linea" style="max-width:1100px; margin: 0 auto;"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="perfil-stats">
+    <div class="stat-perfil">
+      <div class="stat-perfil-num" id="stat-pedidos">—</div>
+      <div class="stat-perfil-label">Pedidos realizados</div>
+    </div>
+    <div class="stat-perfil">
+      <div class="stat-perfil-num" id="stat-gastado">—</div>
+      <div class="stat-perfil-label">Total invertido</div>
+    </div>
+    <div class="stat-perfil">
+      <div class="stat-perfil-num" id="stat-reservas">—</div>
+      <div class="stat-perfil-label">Reservaciones</div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="perfil-contenido">
+    <div class="perfil-tabs">
+      <button class="perfil-tab activo" id="tab-pedidos" onclick="cambiarTab('pedidos')">🍽️ Mis Pedidos</button>
+      <button class="perfil-tab" id="tab-reservas" onclick="cambiarTab('reservas')">📅 Mis Reservaciones</button>
+    </div>
+
+    <div id="seccion-pedidos">
+      <div class="cargando">Cargando tus pedidos...</div>
+    </div>
+
+    <div id="seccion-reservas" style="display:none;">
+      <div class="cargando">Cargando tus reservaciones...</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ltxjmnzqyznuexhrmznt.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_YX3Ivtgp3km23oeW391E2A_AAFRZCEV';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let usuario = null;
+    let pedidosData = [];
+    let reservasData = [];
+
+    // ── INICIALIZAR ──
+    async function init() {
+      const { data: { user } } = await db.auth.getUser();
+
+      if (!user) {
+        // No hay sesión → redirigir al inicio
+        window.location.href = 'index.html';
+        return;
+      }
+
+      usuario = user;
+      mostrarPerfil(user);
+      await Promise.all([cargarPedidos(user), cargarReservas(user)]);
+    }
+
+    function mostrarPerfil(user) {
+      const nombre  = user.user_metadata?.nombre || user.email.split('@')[0];
+      const inicial = nombre.charAt(0).toUpperCase();
+      const desde   = new Date(user.created_at).toLocaleDateString('es-ES', { year:'numeric', month:'long' });
+
+      document.getElementById('avatar-grande').textContent  = inicial;
+      document.getElementById('perfil-nombre').textContent  = nombre;
+      document.getElementById('perfil-email').textContent   = user.email;
+      document.getElementById('perfil-miembro').textContent = `Miembro desde ${desde}`;
+      document.title = `${nombre} — La Cueva Latina`;
+    }
+
+    // ── PEDIDOS ──
+    async function cargarPedidos(user) {
+      const { data, error } = await db
+        .from('pedidos')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      pedidosData = error ? [] : (data || []);
+      actualizarStats();
+      renderizarPedidos();
+    }
+
+    function renderizarPedidos() {
+      const el = document.getElementById('seccion-pedidos');
+
+      if (!pedidosData.length) {
+        el.innerHTML = `
+          <div class="estado-vacio">
+            <span class="icono">🍽️</span>
+            <p>Todavía no has realizado ningún pedido.<br>¡Explora nuestro menú y pide algo delicioso!</p>
+            <a href="index.html#menu" class="btn-ir">Ver el Menú</a>
+          </div>`;
+        return;
+      }
+
+      el.innerHTML = `<div class="pedidos-grid">${pedidosData.map((p, i) => {
+        const items = Array.isArray(p.items)
+          ? p.items.map(it => `${it.emoji} ${it.nombre} x${it.cantidad}`).join(' · ')
+          : '—';
+        const fecha = new Date(p.created_at).toLocaleDateString('es-ES', {
+          day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+        const tipo = p.tipo === 'mesa' ? `🍽️ Mesa ${p.numero_mesa || ''}` : '🥡 Para llevar';
+
+        return `
+          <div class="pedido-card" style="animation-delay:${i*0.07}s">
+            <div class="pedido-card-header">
+              <div class="pedido-numero">${p.numero_pedido}</div>
+              <div class="pedido-tipo">${tipo}</div>
+            </div>
+            <div class="pedido-card-body">
+              <div class="pedido-items">${items}</div>
+              <div class="pedido-footer">
+                <span class="pedido-total">$${Number(p.total).toFixed(2)}</span>
+                <span class="pedido-fecha">${fecha}</span>
+              </div>
+            </div>
+          </div>`;
+      }).join('')}</div>`;
+    }
+
+    // ── RESERVACIONES ──
+    async function cargarReservas(user) {
+      const { data, error } = await db
+        .from('reservaciones')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('fecha', { ascending: false });
+
+      reservasData = error ? [] : (data || []);
+      actualizarStats();
+      renderizarReservas();
+    }
+
+    function renderizarReservas() {
+      const el = document.getElementById('seccion-reservas');
+
+      if (!reservasData.length) {
+        el.innerHTML = `
+          <div class="estado-vacio">
+            <span class="icono">📅</span>
+            <p>No tienes reservaciones registradas.<br>¡Reserva tu mesa y asegura tu lugar!</p>
+            <a href="index.html#reservaciones" class="btn-ir">Reservar Mesa</a>
+          </div>`;
+        return;
+      }
+
+      el.innerHTML = `<div class="reservas-grid">${reservasData.map((r, i) => {
+        const fecha = new Date(r.fecha + 'T12:00:00').toLocaleDateString('es-ES', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+        const hoy    = new Date().toISOString().split('T')[0];
+        const esHoy  = r.fecha === hoy;
+        const esPast = r.fecha < hoy;
+
+        return `
+          <div class="reserva-card" style="animation-delay:${i*0.07}s; ${esHoy ? 'border-color:rgba(240,132,26,0.4)' : ''}">
+            ${esHoy ? '<div style="font-size:0.7rem;letter-spacing:2px;color:var(--ambar);margin-bottom:10px">● HOY</div>' : ''}
+            <div class="reserva-fecha-grande">${fecha}</div>
+            <div class="reserva-hora">🕐 ${r.hora}</div>
+            <div class="reserva-detalle">👥 ${r.personas} persona${r.personas > 1 ? 's' : ''}</div>
+            ${r.mensaje ? `<div class="reserva-detalle">📝 ${r.mensaje}</div>` : ''}
+            ${esPast && !esHoy ? '<div style="margin-top:12px;font-size:0.75rem;color:var(--texto-suave);opacity:0.6">Reserva pasada</div>' : ''}
+          </div>`;
+      }).join('')}</div>`;
+    }
+
+    // ── STATS ──
+    function actualizarStats() {
+      const gastado = pedidosData.reduce((s, p) => s + Number(p.total), 0);
+      document.getElementById('stat-pedidos').textContent  = pedidosData.length;
+      document.getElementById('stat-gastado').textContent  = '$' + gastado.toFixed(0);
+      document.getElementById('stat-reservas').textContent = reservasData.length;
+    }
+
+    // ── TABS ──
+    function cambiarTab(tab) {
+      const esPedidos = tab === 'pedidos';
+      document.getElementById('seccion-pedidos').style.display = esPedidos ? 'block' : 'none';
+      document.getElementById('seccion-reservas').style.display = esPedidos ? 'none' : 'block';
+      document.getElementById('tab-pedidos').classList.toggle('activo', esPedidos);
+      document.getElementById('tab-reservas').classList.toggle('activo', !esPedidos);
+    }
+
+    // ── CERRAR SESIÓN ──
+    async function cerrarSesion() {
+      await db.auth.signOut();
+      window.location.href = 'index.html';
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -34,11 +34,110 @@
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
-    <!-- Ícono del carrito de compras -->
-    <div class="nav-carrito" id="btn-carrito">
-      🛒 <span class="carrito-contador" id="carrito-contador">0</span>
+    <div class="nav-derecha">
+      <!-- Usuario (auth.js lo rellena) -->
+      <div id="nav-usuario"></div>
+      <!-- Carrito -->
+      <div class="nav-carrito" id="btn-carrito">
+        🛒 <span class="carrito-contador" id="carrito-contador">0</span>
+      </div>
     </div>
   </nav>
+
+  <!-- ============================================
+       MODAL LOGIN / REGISTRO
+  ============================================ -->
+  <div class="auth-overlay" id="auth-overlay">
+    <div class="auth-contenedor">
+
+      <!-- LADO IZQUIERDO — Atmosférico -->
+      <div class="auth-izquierda">
+        <div class="auth-izq-contenido">
+          <div class="auth-marca">La Cueva Latina</div>
+          <blockquote class="auth-cita">
+            "Cada plato es una historia.<br>Cada visita, un recuerdo."
+          </blockquote>
+          <div class="auth-detalles">
+            <div class="auth-detalle-item">🔥 Cocina artesanal</div>
+            <div class="auth-detalle-item">🍷 Ambiente inigualable</div>
+            <div class="auth-detalle-item">⭐ Experiencia única</div>
+          </div>
+        </div>
+        <div class="auth-izq-glow"></div>
+      </div>
+
+      <!-- LADO DERECHO — Formulario -->
+      <div class="auth-derecha">
+        <button class="auth-cerrar" onclick="cerrarLoginModal()">✕</button>
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab activo" id="auth-tab-entrar" onclick="cambiarTabAuth('entrar')">Iniciar Sesión</button>
+          <button class="auth-tab" id="auth-tab-registrar" onclick="cambiarTabAuth('registrar')">Crear Cuenta</button>
+        </div>
+
+        <!-- Mensajes -->
+        <div class="auth-error"  id="auth-error"></div>
+        <div class="auth-success" id="auth-success"></div>
+
+        <!-- Formulario: Entrar -->
+        <div id="auth-form-entrar">
+          <div class="auth-bienvenida">
+            <h2>Bienvenido de vuelta</h2>
+            <p>Te hemos echado de menos 🔥</p>
+          </div>
+          <div class="auth-campo">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="tu@email.com"
+              onkeydown="if(event.key==='Enter') iniciarSesion()" />
+          </div>
+          <div class="auth-campo">
+            <label>Contraseña</label>
+            <input type="password" id="login-password" placeholder="••••••••"
+              onkeydown="if(event.key==='Enter') iniciarSesion()" />
+          </div>
+          <button class="btn-auth-primario" id="btn-login" onclick="iniciarSesion()">
+            Entrar a La Cueva
+          </button>
+          <p class="auth-cambiar">¿Primera vez?
+            <span onclick="cambiarTabAuth('registrar')">Crea tu cuenta gratis</span>
+          </p>
+        </div>
+
+        <!-- Formulario: Registrarse -->
+        <div id="auth-form-registrar" class="oculto">
+          <div class="auth-bienvenida">
+            <h2>Únete a la familia</h2>
+            <p>Tu mesa te espera siempre 🍽️</p>
+          </div>
+          <div class="auth-campo">
+            <label>Tu nombre</label>
+            <input type="text" id="reg-nombre" placeholder="¿Cómo te llamamos?" />
+          </div>
+          <div class="auth-campo">
+            <label>Email</label>
+            <input type="email" id="reg-email" placeholder="tu@email.com" />
+          </div>
+          <div class="auth-campo">
+            <label>Contraseña</label>
+            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" />
+          </div>
+          <div class="auth-campo">
+            <label>Repite la contraseña</label>
+            <input type="password" id="reg-password2" placeholder="••••••••"
+              onkeydown="if(event.key==='Enter') registrarse()" />
+          </div>
+          <button class="btn-auth-primario" id="btn-registrar" onclick="registrarse()">
+            Crear mi Cuenta
+          </button>
+          <p class="auth-cambiar">¿Ya tienes cuenta?
+            <span onclick="cambiarTabAuth('entrar')">Inicia sesión</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================
        SECCIÓN 1: HERO (la primera imagen grande)
@@ -336,6 +435,7 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
   <!-- Conectamos el archivo JavaScript al final del body -->
   <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
 
 </body>
 </html>

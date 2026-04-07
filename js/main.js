@@ -67,6 +67,23 @@ const platos = [
 
 let carrito = {}; // { nombre: { plato, cantidad } }
 
+// ── PERSISTENCIA DEL CARRITO ───────────────
+// Guarda el carrito en localStorage para que
+// no se pierda al recargar o iniciar sesión
+
+function guardarCarritoLocal() {
+  localStorage.setItem('carrito_lacueva', JSON.stringify(carrito));
+}
+
+function cargarCarritoLocal() {
+  try {
+    const guardado = localStorage.getItem('carrito_lacueva');
+    if (guardado) carrito = JSON.parse(guardado);
+  } catch (_) {
+    carrito = {};
+  }
+}
+
 // ── PARTÍCULAS DE BRASAS ───────────────────
 // Crea pequeños puntos de luz que suben como
 // brasas flotando en el hero
@@ -149,13 +166,12 @@ function agregarAlCarrito(nombrePlato) {
   if (!plato) return;
 
   if (carrito[nombrePlato]) {
-    // Ya estaba en el carrito → aumentar cantidad
     carrito[nombrePlato].cantidad++;
   } else {
-    // Plato nuevo → agregar con cantidad 1
     carrito[nombrePlato] = { plato, cantidad: 1 };
   }
 
+  guardarCarritoLocal();
   actualizarCarrito();
   animarContador();
 }
@@ -171,6 +187,7 @@ function cambiarCantidad(nombrePlato, cambio) {
     delete carrito[nombrePlato];
   }
 
+  guardarCarritoLocal();
   actualizarCarrito();
 }
 
@@ -252,9 +269,11 @@ async function manejarReservacion(e) {
   btn.textContent = 'Guardando...';
   btn.disabled = true;
 
-  // Guardar en Supabase
+  // Guardar en Supabase (con user_id si está logueado)
+  const { data: { user } } = await db.auth.getUser();
   const { error } = await db.from('reservaciones').insert({
-    nombre, telefono, fecha, hora, personas, mensaje
+    nombre, telefono, fecha, hora, personas, mensaje,
+    user_id: user?.id || null
   });
 
   const form = document.getElementById('form-reservacion');
@@ -383,6 +402,9 @@ async function confirmarPedido() {
   }));
   const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
 
+  // Obtener usuario actual (si está logueado)
+  const { data: { user } } = await db.auth.getUser();
+
   // Guardar en Supabase
   const { error } = await db.from('pedidos').insert({
     numero_pedido:    numeroPedido,
@@ -392,7 +414,8 @@ async function confirmarPedido() {
     numero_mesa:      tipoPedido === 'mesa' ? mesa : null,
     items:            items,
     total:            total,
-    notas:            notas || null
+    notas:            notas || null,
+    user_id:          user?.id || null
   });
 
   btn.textContent = 'Confirmar Pedido';
@@ -415,8 +438,9 @@ async function confirmarPedido() {
   // Lanzar brasas de celebración
   lanzarBrasasExito();
 
-  // Vaciar carrito
+  // Vaciar carrito (local y localStorage)
   carrito = {};
+  localStorage.removeItem('carrito_lacueva');
   actualizarCarrito();
 }
 
@@ -469,7 +493,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Generar las tarjetas del menú
   renderizarMenu();
 
-  // 3. Inicializar el carrito vacío
+  // 3. Cargar carrito guardado (no se pierde al recargar)
+  cargarCarritoLocal();
   actualizarCarrito();
 
   // 4. Botón del carrito en el navbar
