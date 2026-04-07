@@ -1000,6 +1000,75 @@ a {
 }
 
 /* =============================================
+   FLATPICKR — Calendario oscuro personalizado
+============================================= */
+.flatpickr-calendar {
+  background: #1a0802 !important;
+  border: 1px solid rgba(240, 132, 26, 0.3) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(232,82,26,0.1) !important;
+}
+
+.flatpickr-month {
+  background: #2d1008 !important;
+  color: var(--ambar) !important;
+  border-radius: 4px 4px 0 0;
+}
+
+.flatpickr-current-month,
+.flatpickr-current-month .cur-month,
+.flatpickr-current-month input.cur-year {
+  color: var(--ambar) !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1rem !important;
+}
+
+.flatpickr-prev-month, .flatpickr-next-month {
+  color: var(--ambar) !important;
+  fill: var(--ambar) !important;
+}
+
+.flatpickr-prev-month:hover, .flatpickr-next-month:hover {
+  color: var(--brasa) !important;
+  fill: var(--brasa) !important;
+}
+
+.flatpickr-weekday {
+  color: var(--texto-suave) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 1px !important;
+}
+
+.flatpickr-day {
+  color: var(--crema) !important;
+  border-radius: 2px !important;
+}
+
+.flatpickr-day:hover {
+  background: rgba(240, 132, 26, 0.2) !important;
+  border-color: rgba(240, 132, 26, 0.4) !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+  background: linear-gradient(135deg, var(--fuego), var(--ambar)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 0 12px rgba(232, 82, 26, 0.5) !important;
+  color: white !important;
+}
+
+.flatpickr-day.today {
+  border-color: var(--ambar) !important;
+  color: var(--ambar) !important;
+}
+
+.flatpickr-day.disabled,
+.flatpickr-day.disabled:hover {
+  color: rgba(180, 130, 80, 0.25) !important;
+  cursor: not-allowed !important;
+}
+
+/* =============================================
    MENSAJE DE CONFIRMACIÓN RESERVACIÓN
 ============================================= */
 .mensaje-confirmacion {

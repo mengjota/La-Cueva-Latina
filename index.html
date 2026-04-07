@@ -104,11 +104,28 @@
       </div>
       <div class="form-grupo">
         <label for="fecha">Fecha</label>
-        <input type="date" id="fecha" required />
+        <input type="text" id="fecha" placeholder="Selecciona una fecha" autocomplete="off" required />
       </div>
       <div class="form-grupo">
         <label for="hora">Hora</label>
-        <input type="time" id="hora" required />
+        <select id="hora" required>
+          <option value="">Selecciona una hora</option>
+          <option value="12:00">12:00 — Mediodía</option>
+          <option value="12:30">12:30</option>
+          <option value="13:00">13:00</option>
+          <option value="13:30">13:30</option>
+          <option value="14:00">14:00</option>
+          <option value="14:30">14:30</option>
+          <option value="15:00">15:00</option>
+          <option value="19:00">19:00 — Noche</option>
+          <option value="19:30">19:30</option>
+          <option value="20:00">20:00</option>
+          <option value="20:30">20:30</option>
+          <option value="21:00">21:00</option>
+          <option value="21:30">21:30</option>
+          <option value="22:00">22:00</option>
+          <option value="22:30">22:30</option>
+        </select>
       </div>
       <div class="form-grupo">
         <label for="personas">Número de personas</label>
@@ -193,6 +210,10 @@
 
   <!-- Supabase: conexión con la base de datos -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Flatpickr: selector de fecha profesional -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
   <!-- Conectamos el archivo JavaScript al final del body -->
   <script src="js/main.js"></script>
 

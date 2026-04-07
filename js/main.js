@@ -239,10 +239,11 @@ function cerrarCarrito() {
 async function manejarReservacion(e) {
   e.preventDefault();
 
-  const nombre   = document.getElementById('nombre').value;
-  const telefono = document.getElementById('telefono').value;
-  const fecha    = document.getElementById('fecha').value;
-  const hora     = document.getElementById('hora').value;
+  const nombre    = document.getElementById('nombre').value;
+  const telefono  = document.getElementById('telefono').value;
+  const fechaEl   = document.getElementById('fecha');
+  const fecha     = fechaEl.dataset.isoDate || '';
+  const hora      = document.getElementById('hora').value;
   const personas = document.getElementById('personas').value;
   const mensaje  = document.getElementById('mensaje').value;
   const btn      = e.target.querySelector('.btn-reservar');
@@ -331,7 +332,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Botón de cerrar carrito
   document.getElementById('cerrar-carrito').addEventListener('click', cerrarCarrito);
 
-  // 6. Formulario de reservaciones
+  // 6. Calendario Flatpickr en el campo de fecha
+  flatpickr('#fecha', {
+    locale: 'es',
+    dateFormat: 'd/m/Y',          // cómo se muestra al usuario
+    altInput: false,
+    minDate: 'today',             // no permite fechas pasadas
+    disableMobile: true,          // usa siempre el calendario custom
+    disable: [                    // desactivar lunes (día de cierre)
+      function(date) { return date.getDay() === 1; }
+    ],
+    onChange: function(selectedDates, _dateStr, instance) {
+      // guardar en formato YYYY-MM-DD para Supabase
+      if (selectedDates[0]) {
+        instance.element.dataset.isoDate = selectedDates[0].toISOString().split('T')[0];
+      }
+    }
+  });
+
+  // 7. Formulario de reservaciones
   document.getElementById('form-reservacion').addEventListener('submit', manejarReservacion);
 
   // 7. Scroll de la navbar
