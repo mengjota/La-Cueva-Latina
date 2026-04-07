@@ -1000,6 +1000,361 @@ a {
 }
 
 /* =============================================
+   CHECKOUT — Modal pantalla completa
+============================================= */
+.checkout-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: var(--fondo-carbon);
+  display: flex;
+  align-items: stretch;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkout-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.checkout-cerrar {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(240,132,26,0.25);
+  color: var(--crema);
+  font-size: 1.2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkout-cerrar:hover {
+  background: rgba(232,82,26,0.2);
+  border-color: var(--fuego);
+  box-shadow: 0 0 15px rgba(232,82,26,0.3);
+}
+
+.checkout-contenedor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  transform: translateY(40px);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkout-overlay.visible .checkout-contenedor {
+  transform: translateY(0);
+}
+
+/* ── LADO IZQUIERDO: Resumen ── */
+.checkout-resumen {
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 30%, rgba(90,26,5,0.4) 0%, transparent 65%),
+    linear-gradient(160deg, #1a0802, #0e0400);
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(240,132,26,0.15);
+  overflow-y: auto;
+}
+
+.checkout-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--dorado), var(--brasa));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+
+.checkout-subtitulo {
+  font-size: 0.75rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  margin-bottom: 40px;
+}
+
+.checkout-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.checkout-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(45,16,8,0.6);
+  border: 1px solid rgba(240,132,26,0.1);
+  border-radius: 4px;
+  animation: item-entrada 0.4s ease both;
+}
+
+@keyframes item-entrada {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.checkout-item-emoji {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  background: rgba(45,16,8,0.8);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkout-item-info { flex: 1; }
+
+.checkout-item-nombre {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--crema);
+  margin-bottom: 4px;
+}
+
+.checkout-item-cantidad {
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+  letter-spacing: 1px;
+}
+
+.checkout-item-precio {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ambar);
+}
+
+.checkout-linea {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240,132,26,0.3), transparent);
+  margin: 28px 0 20px;
+}
+
+.checkout-total-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.checkout-total-final {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--crema);
+  margin-top: 8px;
+}
+
+.checkout-total-final span:last-child {
+  color: var(--ambar);
+  text-shadow: 0 0 15px rgba(240,132,26,0.5);
+}
+
+/* ── LADO DERECHO: Formulario ── */
+.checkout-form-lado {
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  position: relative;
+}
+
+.checkout-paso { width: 100%; }
+.checkout-paso.oculto { display: none; }
+
+.checkout-titulo {
+  font-size: 2rem;
+  color: var(--crema);
+  margin-bottom: 30px;
+}
+
+/* Selector mesa / para llevar */
+.tipo-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.tipo-opcion {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: rgba(45,16,8,0.5);
+  border: 1px solid rgba(240,132,26,0.15);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tipo-opcion:hover {
+  border-color: rgba(240,132,26,0.4);
+  background: rgba(45,16,8,0.8);
+}
+
+.tipo-opcion.activo {
+  border-color: var(--ambar);
+  background: rgba(240,132,26,0.08);
+  box-shadow: 0 0 20px rgba(240,132,26,0.15), inset 0 0 15px rgba(240,132,26,0.05);
+}
+
+.tipo-icono { font-size: 1.8rem; }
+
+.tipo-texto strong {
+  display: block;
+  color: var(--crema);
+  font-size: 0.9rem;
+  margin-bottom: 3px;
+}
+
+.tipo-texto span {
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+}
+
+/* Campos del formulario */
+.checkout-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.checkout-campo label {
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ambar);
+}
+
+.requerido { color: var(--fuego); }
+
+.checkout-campo input,
+.checkout-campo textarea {
+  background: rgba(45,16,8,0.7);
+  border: 1px solid rgba(240,132,26,0.2);
+  color: var(--crema);
+  padding: 13px 18px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  border-radius: 2px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.checkout-campo input:focus,
+.checkout-campo textarea:focus {
+  border-color: var(--ambar);
+  box-shadow: 0 0 0 2px rgba(240,132,26,0.1), 0 0 20px rgba(240,132,26,0.12);
+}
+
+.checkout-campo textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.checkout-btn-confirmar {
+  width: 100%;
+  text-align: center;
+  padding: 18px;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.checkout-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 10px;
+  min-height: 20px;
+  text-align: center;
+}
+
+/* ── PANTALLA DE ÉXITO ── */
+.exito-contenido {
+  text-align: center;
+  position: relative;
+}
+
+.exito-brasas {
+  position: absolute;
+  inset: -60px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.exito-icono {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: exito-pulse 2s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes exito-pulse {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 10px rgba(232,82,26,0.5)); }
+  50%       { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(240,132,26,0.8)); }
+}
+
+.exito-titulo {
+  font-size: 2.4rem;
+  color: var(--crema);
+  margin-bottom: 16px;
+}
+
+.exito-numero {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--ambar);
+  text-shadow: 0 0 30px rgba(240,132,26,0.6);
+  margin-bottom: 24px;
+  letter-spacing: 4px;
+  animation: exito-pulse 2s ease-in-out infinite;
+}
+
+.exito-mensaje {
+  color: var(--texto-suave);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 380px;
+  margin: 0 auto 24px;
+}
+
+.exito-tiempo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(45,16,8,0.8);
+  border: 1px solid rgba(240,132,26,0.25);
+  border-radius: 30px;
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  color: var(--crema);
+}
+
+.tiempo-icono { font-size: 1.2rem; }
+
+/* =============================================
    FLATPICKR — Calendario oscuro personalizado
 ============================================= */
 .flatpickr-calendar {

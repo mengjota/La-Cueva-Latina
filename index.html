@@ -83,7 +83,110 @@
       <span>Total:</span>
       <span id="carrito-total">$0.00</span>
     </div>
-    <button class="btn btn-primario btn-pedir">Realizar Pedido</button>
+    <button class="btn btn-primario btn-pedir" id="btn-realizar-pedido">Realizar Pedido</button>
+  </div>
+
+  <!-- ============================================
+       MODAL CHECKOUT — Pantalla completa
+  ============================================ -->
+  <div class="checkout-overlay" id="checkout-overlay">
+
+    <!-- Botón cerrar -->
+    <button class="checkout-cerrar" id="checkout-cerrar">✕</button>
+
+    <div class="checkout-contenedor">
+
+      <!-- IZQUIERDA: Resumen del pedido -->
+      <div class="checkout-resumen">
+        <div class="checkout-resumen-header">
+          <div class="checkout-logo">La Cueva Latina</div>
+          <div class="checkout-subtitulo">Resumen de tu pedido</div>
+        </div>
+
+        <div class="checkout-items" id="checkout-items"></div>
+
+        <div class="checkout-linea"></div>
+
+        <div class="checkout-total-row">
+          <span>Subtotal</span>
+          <span id="checkout-subtotal">$0.00</span>
+        </div>
+        <div class="checkout-total-row checkout-total-final">
+          <span>Total</span>
+          <span id="checkout-total-final">$0.00</span>
+        </div>
+      </div>
+
+      <!-- DERECHA: Formulario -->
+      <div class="checkout-form-lado">
+
+        <!-- PASO 1: Datos y tipo -->
+        <div class="checkout-paso" id="checkout-paso-1">
+          <h2 class="checkout-titulo">¿Cómo lo quieres?</h2>
+
+          <div class="tipo-selector">
+            <div class="tipo-opcion activo" id="tipo-mesa" onclick="seleccionarTipo('mesa')">
+              <div class="tipo-icono">🍽️</div>
+              <div class="tipo-texto">
+                <strong>En mesa</strong>
+                <span>Come aquí con nosotros</span>
+              </div>
+            </div>
+            <div class="tipo-opcion" id="tipo-llevar" onclick="seleccionarTipo('llevar')">
+              <div class="tipo-icono">🥡</div>
+              <div class="tipo-texto">
+                <strong>Para llevar</strong>
+                <span>Te lo preparamos</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-campo" id="campo-mesa">
+            <label>Número de mesa</label>
+            <input type="number" id="co-mesa" placeholder="Ej: 4" min="1" max="30" />
+          </div>
+
+          <div class="checkout-campo">
+            <label>Tu nombre <span class="requerido">*</span></label>
+            <input type="text" id="co-nombre" placeholder="¿Cómo te llamamos?" required />
+          </div>
+
+          <div class="checkout-campo">
+            <label>Teléfono</label>
+            <input type="tel" id="co-telefono" placeholder="+1 (000) 000-0000" />
+          </div>
+
+          <div class="checkout-campo">
+            <label>Notas para la cocina</label>
+            <textarea id="co-notas" placeholder="Sin cebolla, alergia a los mariscos..."></textarea>
+          </div>
+
+          <button class="btn btn-primario checkout-btn-confirmar" onclick="confirmarPedido()">
+            Confirmar Pedido
+          </button>
+          <div class="checkout-error" id="checkout-error"></div>
+        </div>
+
+        <!-- PASO 2: Éxito -->
+        <div class="checkout-paso oculto" id="checkout-paso-2">
+          <div class="exito-contenido">
+            <div class="exito-brasas" id="exito-brasas"></div>
+            <div class="exito-icono">🔥</div>
+            <h2 class="exito-titulo">¡Pedido Recibido!</h2>
+            <div class="exito-numero" id="exito-numero">#0000</div>
+            <p class="exito-mensaje" id="exito-mensaje"></p>
+            <div class="exito-tiempo">
+              <span class="tiempo-icono">⏱</span>
+              <span>Tiempo estimado: <strong>20–30 min</strong></span>
+            </div>
+            <button class="btn btn-secundario" style="margin-top:32px;" onclick="cerrarCheckout()">
+              Volver al menú
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- ============================================

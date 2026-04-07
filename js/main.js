@@ -298,6 +298,152 @@ async function manejarReservacion(e) {
   }, 400);
 }
 
+// ── CHECKOUT ───────────────────────────────
+let tipoPedido = 'mesa'; // 'mesa' o 'llevar'
+
+function abrirCheckout() {
+  const items = Object.values(carrito);
+  if (items.length === 0) return;
+
+  // Rellenar resumen
+  const contenedor = document.getElementById('checkout-items');
+  contenedor.innerHTML = items.map(({ plato, cantidad }, i) => `
+    <div class="checkout-item" style="animation-delay: ${i * 0.08}s">
+      <div class="checkout-item-emoji">${plato.emoji}</div>
+      <div class="checkout-item-info">
+        <div class="checkout-item-nombre">${plato.nombre}</div>
+        <div class="checkout-item-cantidad">x${cantidad}</div>
+      </div>
+      <div class="checkout-item-precio">$${(plato.precio * cantidad).toFixed(2)}</div>
+    </div>
+  `).join('');
+
+  const total = items.reduce((s, { plato, cantidad }) => s + plato.precio * cantidad, 0);
+  document.getElementById('checkout-subtotal').textContent    = '$' + total.toFixed(2);
+  document.getElementById('checkout-total-final').textContent = '$' + total.toFixed(2);
+
+  // Resetear al paso 1
+  document.getElementById('checkout-paso-1').classList.remove('oculto');
+  document.getElementById('checkout-paso-2').classList.add('oculto');
+  document.getElementById('checkout-error').textContent = '';
+  seleccionarTipo('mesa');
+
+  // Mostrar overlay
+  cerrarCarrito();
+  requestAnimationFrame(() => {
+    document.getElementById('checkout-overlay').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  });
+}
+
+function cerrarCheckout() {
+  document.getElementById('checkout-overlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function seleccionarTipo(tipo) {
+  tipoPedido = tipo;
+  document.getElementById('tipo-mesa').classList.toggle('activo', tipo === 'mesa');
+  document.getElementById('tipo-llevar').classList.toggle('activo', tipo === 'llevar');
+  document.getElementById('campo-mesa').style.display = tipo === 'mesa' ? 'flex' : 'none';
+}
+
+async function confirmarPedido() {
+  const nombre   = document.getElementById('co-nombre').value.trim();
+  const telefono = document.getElementById('co-telefono').value.trim();
+  const mesa     = document.getElementById('co-mesa').value.trim();
+  const notas    = document.getElementById('co-notas').value.trim();
+  const errorEl  = document.getElementById('checkout-error');
+  const btn      = document.querySelector('.checkout-btn-confirmar');
+
+  if (!nombre) {
+    errorEl.textContent = 'Por favor escribe tu nombre.';
+    document.getElementById('co-nombre').focus();
+    return;
+  }
+  if (tipoPedido === 'mesa' && !mesa) {
+    errorEl.textContent = 'Indica el número de tu mesa.';
+    document.getElementById('co-mesa').focus();
+    return;
+  }
+
+  errorEl.textContent = '';
+  btn.textContent = 'Enviando pedido...';
+  btn.disabled = true;
+
+  // Generar número de pedido
+  const numeroPedido = 'LCL-' + Math.floor(1000 + Math.random() * 9000);
+
+  // Preparar items para guardar
+  const items = Object.values(carrito).map(({ plato, cantidad }) => ({
+    nombre: plato.nombre,
+    emoji: plato.emoji,
+    precio: plato.precio,
+    cantidad
+  }));
+  const total = items.reduce((s, i) => s + i.precio * i.cantidad, 0);
+
+  // Guardar en Supabase
+  const { error } = await db.from('pedidos').insert({
+    numero_pedido:    numeroPedido,
+    cliente_nombre:   nombre,
+    cliente_telefono: telefono || null,
+    tipo:             tipoPedido,
+    numero_mesa:      tipoPedido === 'mesa' ? mesa : null,
+    items:            items,
+    total:            total,
+    notas:            notas || null
+  });
+
+  btn.textContent = 'Confirmar Pedido';
+  btn.disabled = false;
+
+  if (error) {
+    errorEl.textContent = 'Error al enviar el pedido. Inténtalo de nuevo.';
+    return;
+  }
+
+  // Mostrar pantalla de éxito
+  document.getElementById('checkout-paso-1').classList.add('oculto');
+  document.getElementById('checkout-paso-2').classList.remove('oculto');
+  document.getElementById('exito-numero').textContent = numeroPedido;
+  document.getElementById('exito-mensaje').textContent =
+    tipoPedido === 'mesa'
+      ? `${nombre}, tu pedido está en camino a la mesa ${mesa}. ¡Que lo disfrutes!`
+      : `${nombre}, tu pedido para llevar estará listo en breve. Te avisamos al ${telefono || 'completarlo'}.`;
+
+  // Lanzar brasas de celebración
+  lanzarBrasasExito();
+
+  // Vaciar carrito
+  carrito = {};
+  actualizarCarrito();
+}
+
+function lanzarBrasasExito() {
+  const contenedor = document.getElementById('exito-brasas');
+  contenedor.innerHTML = '';
+  for (let i = 0; i < 25; i++) {
+    setTimeout(() => {
+      const b = document.createElement('div');
+      b.classList.add('brasa');
+      const size = Math.random() * 5 + 2;
+      b.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random() * 100}%;
+        bottom:0;
+        animation-duration:${Math.random() * 3 + 2}s;
+        background:${['rgba(232,82,26,0.9)','rgba(240,132,26,0.9)','rgba(255,154,60,0.8)'][Math.floor(Math.random()*3)]};
+        box-shadow:0 0 ${size*2}px currentColor;
+        --drift:${(Math.random()-0.5)*100}px;
+        --drift2:${(Math.random()-0.5)*150}px;
+      `;
+      contenedor.appendChild(b);
+      setTimeout(() => b.remove(), 5000);
+    }, i * 80);
+  }
+}
+
 // ── NAVBAR: OCULTAR AL HACER SCROLL ────────
 // La navbar se vuelve más opaca al bajar la página
 
@@ -331,6 +477,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Botón de cerrar carrito
   document.getElementById('cerrar-carrito').addEventListener('click', cerrarCarrito);
+
+  // 5b. Botón realizar pedido → abrir checkout
+  document.getElementById('btn-realizar-pedido').addEventListener('click', abrirCheckout);
+
+  // 5c. Botón cerrar checkout
+  document.getElementById('checkout-cerrar').addEventListener('click', cerrarCheckout);
+
+  // 5d. Cerrar checkout con Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') cerrarCheckout();
+  });
 
   // 6. Calendario Flatpickr en el campo de fecha
   flatpickr('#fecha', {
