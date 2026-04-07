@@ -2,6 +2,11 @@
 //   LA CUEVA LATINA — JavaScript Principal
 // =============================================
 
+// ── CONEXIÓN CON SUPABASE ───────────────────
+const SUPABASE_URL  = 'https://ltxjmnzqyznuexhrmznt.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_YX3Ivtgp3km23oeW391E2A_AAFRZCEV';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ── DATOS DEL MENÚ ─────────────────────────
 // Aquí defines los platos. Cada plato tiene:
 // emoji (imagen), nombre, descripción y precio
@@ -231,21 +236,39 @@ function cerrarCarrito() {
 }
 
 // ── FORMULARIO DE RESERVACIONES ─────────────
-function manejarReservacion(e) {
-  e.preventDefault(); // evita que recargue la página
+async function manejarReservacion(e) {
+  e.preventDefault();
 
   const nombre   = document.getElementById('nombre').value;
+  const telefono = document.getElementById('telefono').value;
   const fecha    = document.getElementById('fecha').value;
   const hora     = document.getElementById('hora').value;
   const personas = document.getElementById('personas').value;
+  const mensaje  = document.getElementById('mensaje').value;
+  const btn      = e.target.querySelector('.btn-reservar');
 
-  // Formatear la fecha para mostrarla bonito
+  // Mostrar estado de carga en el botón
+  btn.textContent = 'Guardando...';
+  btn.disabled = true;
+
+  // Guardar en Supabase
+  const { error } = await db.from('reservaciones').insert({
+    nombre, telefono, fecha, hora, personas, mensaje
+  });
+
+  const form = document.getElementById('form-reservacion');
+
+  if (error) {
+    btn.textContent = 'Confirmar Reservación';
+    btn.disabled = false;
+    alert('Hubo un error al guardar la reservación. Inténtalo de nuevo.');
+    return;
+  }
+
+  // Éxito — mostrar confirmación
   const fechaFormateada = new Date(fecha + 'T12:00:00').toLocaleDateString('es-ES', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
-
-  // Reemplazar el formulario por un mensaje de confirmación
-  const form = document.getElementById('form-reservacion');
 
   form.style.opacity = '0';
   form.style.transition = 'opacity 0.4s ease';
