@@ -446,6 +446,12 @@
         return;
       }
 
+      // Si es admin → redirigir al panel admin
+      if (user.email === 'restaurant@admin.com' || user.user_metadata?.role === 'admin') {
+        window.location.replace('admin.html');
+        return;
+      }
+
       usuario = user;
       mostrarPerfil(user);
       await Promise.all([cargarPedidos(user), cargarReservas(user)]);

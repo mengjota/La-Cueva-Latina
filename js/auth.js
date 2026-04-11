@@ -3,7 +3,6 @@
 // =============================================
 
 // Escucha cambios de sesión en tiempo real
-// (login, logout, refresh de token)
 db.auth.onAuthStateChange((_event, session) => {
   const user = session?.user ?? null;
   actualizarNavUsuario(user);
@@ -64,7 +63,17 @@ async function iniciarSesion() {
     return;
   }
 
-  // Éxito
+  // Éxito — si es admin, redirigir con tokens en URL para que Supabase los detecte
+  if (data.user.email === 'restaurant@admin.com' || data.user.user_metadata?.role === 'admin') {
+    const s = data.session;
+    const params = new URLSearchParams({
+      access_token:  s.access_token,
+      refresh_token: s.refresh_token
+    });
+    window.location.replace('/admin.html#' + params.toString());
+    return;
+  }
+
   cerrarLoginModal();
   mostrarBienvenida(data.user);
 }

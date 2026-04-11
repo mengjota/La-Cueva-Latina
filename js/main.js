@@ -273,7 +273,8 @@ async function manejarReservacion(e) {
   const { data: { user } } = await db.auth.getUser();
   const { error } = await db.from('reservaciones').insert({
     nombre, telefono, fecha, hora, personas, mensaje,
-    user_id: user?.id || null
+    user_id:    user?.id    || null,
+    user_email: user?.email || null
   });
 
   const form = document.getElementById('form-reservacion');
@@ -415,7 +416,8 @@ async function confirmarPedido() {
     items:            items,
     total:            total,
     notas:            notas || null,
-    user_id:          user?.id || null
+    user_id:          user?.id || null,
+    cliente_email:    user?.email || null
   });
 
   btn.textContent = 'Confirmar Pedido';
